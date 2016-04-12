@@ -45,7 +45,7 @@ app.use(passport.session());
 
 //Authentication setup
 var User = require('./models/user');
-var config = require('./oauth');
+var config = require('./config/oauth');
 
 //passport config
 passport.serializeUser(function(user, done){
