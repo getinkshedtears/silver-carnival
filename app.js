@@ -1,4 +1,6 @@
 var express = require('express');
+var app = express();
+
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -8,14 +10,20 @@ var mongoose = require('mongoose');
 var session = require('express-session');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 
 var routes = require('./routes/index')(passport);
-
-var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+//install socket as middleware
+app.use(function(req, res, next){
+  res.io = io;
+  next();
+});
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -133,4 +141,4 @@ app.use(function(err, req, res, next) {
 });
 
 
-module.exports = app;
+module.exports = {app: app, server: server};
